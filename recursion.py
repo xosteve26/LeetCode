@@ -268,18 +268,111 @@
 
 # print(maze(1,1,0,(3,3)))
 
-#Maze: Find Path
+#Maze: Find Path With diagnol
 # def maze(processed,r,c,target,array):
 #   if r == target[0] and c == target[1]:
 #     array.append(processed)
 #     return array
 #   if(r<target[0]):
 #     maze(processed+'D',r+1,c,target,array)
+#   if(r < target[0] and c < target[1]):
+#       maze(processed+'V', r+1, c+1, target, array)
 #   if(c<target[1]):
 #     maze(processed+'R',r,c+1,target,array)
 #   return array
 
 # print(maze('',1,1,(3,3),[]))
+
+# Maze With Obstacles
+# block = [(2, 2), (1, 2)]
+# def maze(processed,r,c,target,array):
+
+#   if r == target[0] and c == target[1]:
+#     array.append(processed)
+#     return array
+#   if(r<target[0]):
+#     if((r+1,c) not in block):  
+#         maze(processed+'D',r+1,c,target,array)
+
+#   if(c<target[1]):
+#     if((r, c+1) not in block):
+#         maze(processed+'R',r,c+1,target,array)
+#   return array
+
+# print(maze('',1,1,(3,3),[]))
+
+#Maze: With all directions
+# visited=[(1,1)]
+# def maze(processed,r,c,target,array):
+  
+#   if r == target[0] and c == target[1]:
+#     array.append(processed)
+#     visited.remove((3,3))
+#     return array
+#   print(visited)
+#   if(r<target[0]):
+#       if((r+1, c) not in visited):
+#         visited.append((r+1,c))
+#         maze(processed+'D',r+1,c,target,array)
+  
+#   if(c < target[1]):
+#       if((r, c+1) not in visited):
+#         visited.append((r, c+1))
+#         maze(processed+'R', r, c+1, target, array)
+#   if(r > 1):
+#       if((r-1, c) not in visited):
+#         visited.append((r-1, c))
+#         maze(processed+'U', r-1, c, target, array)
+
+#   if(c > 1):
+#       if((r, c-1) not in visited):
+#         visited.append((r, c-1))
+#         maze(processed+'L', r, c-1, target, array)
+  
+  
+#   visited.pop()
+#   return array
+
+# print(maze('',1,1,(3,3),[]))
+
+#Maze: With all directions
+visited=[(1,1)]
+def maze(processed,r,c,target,array, paths, step):
+
+  if r == target[0] and c == target[1]:
+    array.append(processed)
+    for i in paths:
+      print(i)
+    print(processed)
+    visited.remove((3,3))
+    return array
+  paths[r-1][c-1]=step
+  if(r<target[0]):
+      if((r+1, c) not in visited):
+        visited.append((r+1,c))
+        maze(processed+'D',r+1,c,target,array, paths, step+1)
+
+  if(c < target[1]):
+      if((r, c+1) not in visited):
+        visited.append((r, c+1))
+        maze(processed+'R', r, c+1, target, array,paths, step+1)
+  if(r > 1):
+      if((r-1, c) not in visited):
+        visited.append((r-1, c))
+        maze(processed+'U', r-1, c, target, array,paths, step+1)
+
+  if(c > 1):
+      if((r, c-1) not in visited):
+        visited.append((r, c-1))
+        maze(processed+'L', r, c-1, target, array,paths, step+1)
+
+  paths[r-1][c-1]=0
+  visited.pop()
+  return array
+
+print(maze('',1,1,(3,3),[],[[0,0,0],[0,0,0],[0,0,0]],1))
+
+
 
 # def mergeOverlappingIntervals(intervals):
 #     intervals.sort()
