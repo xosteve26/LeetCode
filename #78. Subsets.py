@@ -1,19 +1,22 @@
-class Solution:
-    def subsets(self, nums: List[int]) -> List[List[int]]:
-        res = []
-        subset = []
 
-        def helper(i):
-            if i >= len(nums):
-                res.append(subset.copy())
-                return
+def subsets(nums):
+    res = []
+    subset = []
 
-            subset.append(nums[i])
-            helper(i+1)
+    def helper(i):
+        if i >= len(nums):
+            res.append(subset.copy())
+            return
 
-            subset.pop()
-            helper(i+1)
+        subset.append(nums[i])
+        helper(i+1)
 
-        helper(0)
+        subset.pop()
+        helper(i+1)
 
-        return res
+    helper(0)
+
+    return print(res)
+
+
+subsets([1,2,3])
