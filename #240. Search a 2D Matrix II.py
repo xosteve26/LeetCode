@@ -1,5 +1,6 @@
 class Solution:
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+
         def binary_Search(row):
             l = 0
             r = len(row)-1
