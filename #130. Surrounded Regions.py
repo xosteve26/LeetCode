@@ -3,40 +3,36 @@ class Solution:
         """
         Do not return anything, modify board in-place instead.
         """
+        visit = set()
         ROW, COL = len(board), len(board[0])
 
-        visit = set()
-
         def dfs(r, c):
-            if (r, c) in visit:
-                return
-            if(r < 0 or r == ROW or c < 0 or c == COL or board[r][c] == 'X' or board[r][c] == 'T'):
-                return
-
-            board[r][c] = 'T'
-
+            board[r][c] = "T"
             visit.add((r, c))
 
-            dfs(r+1, c)
-            dfs(r-1, c)
-            dfs(r, c+1)
-            dfs(r, c-1)
+            directions = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+            for new_row, new_col in directions:
+                nr = r+new_row
+                nc = c+new_col
 
-        #Capture regions @ Border and dfs them to arbitrary value 'T'
-        for R in range(ROW):
-            for C in range(COL):
-                if(board[R][C] == 'O' and ((R in [0, ROW-1]) or (C in [0, COL-1]))):
-                    dfs(R, C)
+                if(nr < ROW and nc < COL and nr >= 0 and nc >= 0 and (nr, nc) not in visit and board[nr][nc] == "O"):
+                    dfs(nr, nc)
 
-        #Remainig Os are changed to X cuz they're the ones left out that are surrounded by water
-        for R in range(ROW):
-            for C in range(COL):
-                if board[R][C] == 'O':
-                    board[R][C] = 'X'
-        #Change the arbitrary value T back to O
-        for R in range(ROW):
-            for C in range(COL):
-                if board[R][C] == 'T':
-                    board[R][C] = 'O'
+        #Corrupt nodes that are connected to a border "O" that will not be converted to an "X" by giving them an arbitrary value of "T"
+        for i in range(ROW):
+            for j in range(COL):
+                if(j == 0 or j == COL-1 or i == 0 or i == ROW-1):
+                    if(board[i][j] == "O"):
+                        dfs(i, j)
 
-        return board
+        #Convert the Non corrupted nodes["O"] in to an "X" because they aren't connted to a border node.
+        for r in range(ROW):
+            for c in range(COL):
+                if(board[r][c] == "O"):
+                    board[r][c] = "X"
+
+        #Convert the arbitrary value "T" back into an "O"
+        for r in range(ROW):
+            for c in range(COL):
+                if(board[r][c] == "T"):
+                    board[r][c] = "O"
