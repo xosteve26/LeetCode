@@ -1,15 +1,11 @@
 class Solution:
     def fib(self, n: int) -> int:
-        a = 0
-        b = 1
-        fibo = 0
-        if n == 1:
-            return b
-        else:
-            for i in range(2, n+1):
-                fibo = a+b
-                temp = b
-                b = fibo
-                a = temp
+        if n==0 or n == 1:
+            return n
 
-        return fibo
+        dp = [0]*(n+1)
+        dp[1] = 1
+
+        for i in range(2, n+1):
+            dp[i] = dp[i-1]+dp[i-2]
+        return dp[n]
