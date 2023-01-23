@@ -1,11 +1,10 @@
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        res = defaultdict(list)
-        for s in strs:
-            count = [0]*26
-            for c in s:
-                count[ord(c)-ord('a')] += 1
+        resultDict = defaultdict(list)
+        for word in strs:
+            charCount = [0 for _ in range(26)]
+            for CHAR in word:
+                charCount[ord(CHAR) % 97] += 1
+            resultDict[tuple(charCount)].append(word)
 
-            res[tuple(count)].append(s)
-        print(res)
-        return res.values()
+        return resultDict.values()
