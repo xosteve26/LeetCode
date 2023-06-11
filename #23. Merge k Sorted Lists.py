@@ -8,18 +8,56 @@ class Solution:
         if not lists:
             return None
 
-        heap = []
+        # heap = []
 
-        for linkedList in lists:
-            node = linkedList
-            while node:
-                heapq.heappush(heap, node.val)
-                node = node.next
+        # for linkedList in lists:
+        #     node = linkedList
+        #     while node:
+        #         heapq.heappush(heap, node.val)
+        #         node = node.next
 
-        LINKEDLIST = dummy = ListNode(0)
-        while heap:
-            item = heapq.heappop(heap)
-            dummy.next = ListNode(item)
-            dummy = dummy.next
+        # LINKEDLIST = dummy = ListNode(0)
+        # while heap:
+        #     item = heapq.heappop(heap)
+        #     dummy.next = ListNode(item)
+        #     dummy = dummy.next
 
-        return LINKEDLIST.next
+        # return LINKEDLIST.next
+    
+    # def mergeList(l1, l2):
+        #     dummy = curr = ListNode(0)
+        #     while l1 and l2:
+        #         if(l1.val < l2.val):
+        #             curr.next = ListNode(l1.val)
+        #             l1 = l1.next
+        #         else:
+        #             curr.next = ListNode(l2.val)
+        #             l2 = l2.next
+
+        #         curr = curr.next
+        #     if l1: curr.next = l1
+        #     elif l2: curr.next = l2
+
+        #     return dummy.next
+
+        # output = lists[0]
+        # for l in lists[1:]:
+        #     output = mergeList(output, l)
+
+        # return output
+        minHeap = []
+
+        for idx, linkedList in enumerate(lists):
+            if linkedList:
+                heappush(minHeap, (linkedList.val, idx))
+
+        dummy = curr = ListNode(0, None)
+        while minHeap:
+            minValue, i = heappop(minHeap)
+            curr.next = ListNode(minValue)
+            curr = curr.next
+            if(lists[i].next):
+                heappush(minHeap, (lists[i].next.val, i))
+                lists[i] = lists[i].next
+
+        return dummy.next
