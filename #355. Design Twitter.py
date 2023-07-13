@@ -1,51 +1,32 @@
 class Twitter:
 
     def __init__(self):
-        self.i = 0
-        self.posts = {}
-        self.follo = {}
+        self.posts = defaultdict(list)
+        self.followers = defaultdict(set)
+        self.time = 0
+
 
     def postTweet(self, userId: int, tweetId: int) -> None:
-        if userId not in self.posts:
-            self.posts[userId] = []
-        self.i -= 1
-        self.posts[userId].append((self.i, tweetId))
+        self.time+=1
+        self.posts[userId].append((-self.time, tweetId))
 
     def getNewsFeed(self, userId: int) -> List[int]:
-        result = []
-        if userId in self.posts:
-            for post in self.posts[userId]:
-                result.append(post)
+        recentTweets = []
+        tweets = self.posts[userId][:]
+        for followee in self.followers[userId]:
+            tweets+=self.posts[followee]
 
-        if userId in self.follo:
-            for followee in self.follo[userId]:
-                if followee in self.posts:
-                    for pos in self.posts[followee]:
-                        result.append(pos)
+        heapq.heapify(tweets)
+        t=10
+        while tweets and t:
+            recentTweets.append(heapq.heappop(tweets)[1])
+            t-=1
 
-        final = []
-        heapq.heapify(result)
-        c = 1
-        while result and c <= 10:
-            item = heapq.heappop(result)
-            final.append(item[1])
-            c += 1
-
-        return final
+        return recentTweets
 
     def follow(self, followerId: int, followeeId: int) -> None:
-        if followerId not in self.follo:
-            self.follo[followerId] = set()
-        self.follo[followerId].add(followeeId)
+        self.followers[followerId].add(followeeId)
 
     def unfollow(self, followerId: int, followeeId: int) -> None:
-        if followerId in self.follo:
-            self.follo[followerId].remove(followeeId)
-
-
-# Your Twitter object will be instantiated and called as such:
-# obj = Twitter()
-# obj.postTweet(userId,tweetId)
-# param_2 = obj.getNewsFeed(userId)
-# obj.follow(followerId,followeeId)
-# obj.unfollow(followerId,followeeId)
+        if followeeId in self.followers[followerId]:
+            self.followers[followerId].remove(followeeId)
